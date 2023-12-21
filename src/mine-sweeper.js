@@ -1,5 +1,3 @@
-const { NotImplementedError } = require('../extensions/index.js');
-
 /**
  * In the popular Minesweeper game you have a board with some mines and those cells
  * that don't contain a mine have a number in it that indicates the total number of mines
@@ -23,9 +21,38 @@ const { NotImplementedError } = require('../extensions/index.js');
  *  [1, 1, 1]
  * ]
  */
-function minesweeper(/* matrix */) {
-  throw new NotImplementedError('Not implemented');
-  // remove line with error and write your code here
+function minesweeper(matrix) {
+  const result = [];
+
+  function countNeighbors(row, column) {
+    let neighborMinesCount = 0;
+
+    function checkMine(row, column) {
+      if (row < 0 || row > matrix.length - 1 || column < 0 || column > matrix[0].length - 1) return;
+
+      if (matrix[row][column]) neighborMinesCount++;
+    }
+
+    checkMine(row - 1, column);
+    checkMine(row + 1, column);
+    checkMine(row, column - 1);
+    checkMine(row, column + 1);
+    checkMine(row - 1, column - 1);
+    checkMine(row + 1, column + 1);
+    checkMine(row - 1, column + 1);
+    checkMine(row + 1, column - 1);
+
+    return neighborMinesCount;
+  }
+
+  for (let row = 0; row < matrix.length; row++) {
+    result[row] = [];
+    for (let column = 0; column < matrix[0].length; column++) {
+      result[row][column] = countNeighbors(row, column);
+    }
+  }
+
+  return result;
 }
 
 module.exports = {
